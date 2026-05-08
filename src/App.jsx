@@ -11,7 +11,7 @@ function App() {
     decimal: false 
   });
   
-  // Load saved history from localStorage on startup
+  // Load saved history from localStorage on startup in Vercel 
   const [history, setHistory] = useState(() => {
     const saved = localStorage.getItem('logic_history');
     return saved ? JSON.parse(saved) : [];
@@ -32,6 +32,7 @@ function App() {
 
   const toggleRule = (rule) => setRules(prev => ({ ...prev, [rule]: !prev[rule] }));
 
+
   return (
     <div className="container">
       <h1 className='HeaderTxt'> 🐉 LOGIC GATE SIMULATOR [V 1.0]</h1>
@@ -39,6 +40,7 @@ function App() {
       <form onSubmit={handleExecute} className="control-panel">
         <p>Input Validation Parameters:</p>
         <div className="checkbox-row">
+          <label><input type='checkbox' checked={rules.chars} onChange={() => toggleRule('chars')} /> A-Z</label>
           <label><input type='checkbox' checked={rules.digits} onChange={() => toggleRule('digits')} /> 0-9</label>
           <label><input type='checkbox' checked={rules.boolean} onChange={() => toggleRule('boolean')} /> T/F</label>
           <label><input type='checkbox' checked={rules.percent} onChange={() => toggleRule('percent')} /> %</label>
@@ -55,7 +57,7 @@ function App() {
       </form>
 
       <div className="log-container">
-        <h3>Execution History (Saved)</h3>
+        <h3>Input History (Saved)</h3>
         <div className="log-list">
           {history.length === 0 ? (
             <p className="placeholder">System idle. Awaiting data...</p>
