@@ -33,5 +33,6 @@ input {
 
 
 .log-item {
-    border: 2px dotted black;
+    border: 2px dotted rgb(2, 122, 92);
+    border-width: 50%;
 }
