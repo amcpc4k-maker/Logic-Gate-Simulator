@@ -24,3 +24,7 @@ button {
     font-size: 18px;
     height: 50px;
 }
+
+input {
+    margin-top: 50px;
+}
