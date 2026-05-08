@@ -30,3 +30,8 @@ input {
     margin-bottom: 25px;
     gap: 13%;
 }
+
+
+.log-item {
+    border: 2px dotted black;
+}
