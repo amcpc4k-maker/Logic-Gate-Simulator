@@ -1,7 +1,7 @@
 
 
 body {
-    background-color: rgb(30, 31, 31);
+    background-color: rgb(2, 38, 38);
     color: rgb(3, 184, 51);
 }
 
@@ -27,4 +27,5 @@ button {
 
 input {
     margin-bottom: 25px;
+    gap: 20px;
 }
