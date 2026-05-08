@@ -4,3 +4,7 @@ body {
     background-color: rgb(30, 31, 31);
     color: rgb(3, 184, 51);
 }
+
+.HeaderTxt {
+    border-bottom: 2px solid silver;
+}
