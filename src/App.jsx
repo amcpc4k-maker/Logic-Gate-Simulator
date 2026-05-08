@@ -18,7 +18,7 @@ function App() {
       <input type='checkbox'></input>
       <label>00.00:</label>
       <input type='checkbox'></input><br></br>
-      <textarea>eg. SET A = 1</textarea><br></br>
+      <textarea>enter set to validate</textarea><br></br>
       <button>EXECUTE</button>
     </div>
   );
