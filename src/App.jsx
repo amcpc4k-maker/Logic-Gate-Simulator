@@ -16,8 +16,8 @@ function App() {
       <input type='checkbox'></input>
 
       <input type='checkbox'></input>
-      
-      <input type='checkbox'></input>
+
+      <input type='checkbox'></input><br></br>
       <textarea>eg. SET A = 1</textarea><br></br>
       <button>EXECUTE</button>
     </div>
