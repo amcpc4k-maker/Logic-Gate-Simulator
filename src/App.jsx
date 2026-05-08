@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { validateInput } from './logicHandler';
 import './App.css';
 
+
+
 function App() {
   const [inputText, setInputText] = useState('');
   const [rules, setRules] = useState({ 
@@ -9,7 +11,7 @@ function App() {
     boolean: false, 
     percent: false, 
     decimal: false ,
-    ALPHA: false
+    alpha: false
   });
   
   // Load saved history from localStorage on startup in Vercel 
@@ -41,7 +43,7 @@ function App() {
       <form onSubmit={handleExecute} className="control-panel">
         <p>Input Validation Parameters:</p>
         <div className="checkbox-row">
-          <label><input type='checkbox' checked={rules.ALPHA} onChange={() => toggleRule('alpha')} /> A-Z</label>
+          <label><input type='checkbox' checked={rules.alpha}  onChange={() => toggleRule('alpha')} /> A-Z</label>
           <label><input type='checkbox' checked={rules.digits} onChange={() => toggleRule('digits')} /> 0-9</label>
           <label><input type='checkbox' checked={rules.boolean} onChange={() => toggleRule('boolean')} /> T/F</label>
           <label><input type='checkbox' checked={rules.percent} onChange={() => toggleRule('percent')} /> %</label>
