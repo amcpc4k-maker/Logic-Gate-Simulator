@@ -6,7 +6,7 @@ export const validateInput = (text, rules) => {
 
   // Logic checks
   if (rules.digits && /^[0-9]+$/.test(text)) results.push("NUMERIC");
-  if (rules.characters && /^[A-Z]+$/.test(text)) results.push("CHARACTERS");
+  if (rules.alpha && /^[a-zA-Z]+$/.test(text)) results.push("ALPHA");
   if (rules.boolean && /^(true|false|t|f)$/i.test(text)) results.push("BOOLEAN");
   if (rules.percent && text.includes('%')) results.push("PERCENTAGE");
   if (rules.decimal && /^\d+\.\d{2}$/.test(text)) results.push("DECIMAL");
