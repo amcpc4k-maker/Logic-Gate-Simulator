@@ -10,6 +10,14 @@ function App() {
       <h1> &#128009;LOGIC GATE SIMULATOR [V 1.0]</h1>
       </div>
       <p>Check Input Validation:</p>
+
+      <input type='checkbox'></input>
+
+      <input type='checkbox'></input>
+
+      <input type='checkbox'></input>
+      
+      <input type='checkbox'></input>
       <textarea>eg. SET A = 1</textarea><br></br>
       <button>EXECUTE</button>
     </div>
