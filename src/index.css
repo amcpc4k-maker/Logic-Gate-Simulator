@@ -12,6 +12,10 @@ body {
 textarea {
     resize: none;
     width: 600px;
-    height: 50px;
+    height: 63px;
     border-radius: 3px;
+}
+
+button {
+    margin-top: 25px;
 }
