@@ -40,7 +40,7 @@ function App() {
       <form onSubmit={handleExecute} className="control-panel">
         <p>Input Validation Parameters:</p>
         <div className="checkbox-row">
-          <label><input type='checkbox' checked={rules.chars} onChange={() => toggleRule('chars')} /> A-Z</label>
+          <label><input type='checkbox' checked={rules.characters} onChange={() => toggleRule('characters')} /> A-Z</label>
           <label><input type='checkbox' checked={rules.digits} onChange={() => toggleRule('digits')} /> 0-9</label>
           <label><input type='checkbox' checked={rules.boolean} onChange={() => toggleRule('boolean')} /> T/F</label>
           <label><input type='checkbox' checked={rules.percent} onChange={() => toggleRule('percent')} /> %</label>
