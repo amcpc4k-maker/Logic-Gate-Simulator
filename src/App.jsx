@@ -11,7 +11,7 @@ function App() {
       </div>
       <p>Check Input Validation:</p>
       <textarea>eg. SET A = 1</textarea>
-      <p> Waiting for input toggles...</p>
+      <button>EXECUTE</button>
     </div>
   );
 }
