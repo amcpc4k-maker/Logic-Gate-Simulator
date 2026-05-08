@@ -9,6 +9,7 @@ function App() {
       <div className='HeaderTxt'>
       <h1 className='HeaderTxt'> &#128009;LOGIC GATE SIMULATOR [V 1.0]</h1>
       </div>
+      <form>
       <p>Check Input Validation:</p>
       <label>0-9:</label>
       <input type='checkbox'></input>
@@ -18,8 +19,9 @@ function App() {
       <input type='checkbox'></input>
       <label>00.00:</label>
       <input type='checkbox'></input><br></br>
-      <textarea>enter set to validate</textarea><br></br>
+      <textarea>eg. enter set to validate</textarea><br></br>
       <button>EXECUTE</button>
+      </form>
     </div>
   );
 }
