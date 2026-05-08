@@ -2,6 +2,7 @@ export const validateInput = (text, rules) => {
   const results = [];
   const timestamp = new Date().toLocaleTimeString();
 
+  // Logic checks
   if (rules.digits && /^[0-9]+$/.test(text)) results.push("NUMERIC");
   if (rules.boolean && /^(true|false|t|f)$/i.test(text)) results.push("BOOLEAN");
   if (rules.percent && text.includes('%')) results.push("PERCENTAGE");
