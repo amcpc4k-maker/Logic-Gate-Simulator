@@ -7,7 +7,7 @@ function App() {
   return (
     <div >
       <div className='HeaderTxt'>
-      <h1> &#128009;LOGIC GATE SIMULATOR [V 1.0]</h1>
+      <h1 className='HeaderTxt'> &#128009;LOGIC GATE SIMULATOR [V 1.0]</h1>
       </div>
       <p>Check Input Validation:</p>
       <label>0-9:</label>
