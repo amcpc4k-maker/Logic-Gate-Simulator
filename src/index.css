@@ -1,8 +1,8 @@
 
 
 body {
-    background-color: rgb(2, 38, 38);
-    color: rgb(3, 184, 51);
+    background-color: rgb(238, 242, 242);
+    color: rgb(15, 16, 15);
 }
 
 .HeaderTxt {
@@ -19,8 +19,8 @@ textarea {
 button {
     margin-top: 25px;
     font-weight: bold;
-    background-color: lime;
-    color: black;
+    background-color: rgb(15, 16, 15);
+    color: rgb(241, 235, 235);
     font-size: 18px;
     height: 50px;
 }
