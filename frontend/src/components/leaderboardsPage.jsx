@@ -7,7 +7,7 @@ import '../stylesheets/app.css';
 const AVATARS = ["👑", "🚀", "⚡", "🎯", "🔥", "⭐", "🎮", "🏆"];
 
 
-const API_BASE_URL = ";
+const API_BASE_URL = "";
 
 export default function GameLeaderboard() {
   const [leaderboardData, setLeaderboardData] = useState([]);
