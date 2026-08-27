@@ -4,7 +4,7 @@ import '../stylesheets/app.css'
 
 
 // Replace with your Port 8000 URL from GitHub Codespaces
-const API_BASE_URL = "https://ubiquitous-space-doodle-jjp59r77qg9rfj5xv-8000.app.github.dev";
+const API_BASE_URL = "";
 
 const MAX_ATTEMPTS = 6;
 const QWERTY_ROWS = [
