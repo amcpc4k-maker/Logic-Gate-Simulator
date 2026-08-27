@@ -7,7 +7,7 @@ import '../stylesheets/app.css';
 const AVATARS = ["👑", "🚀", "⚡", "🎯", "🔥", "⭐", "🎮", "🏆"];
 
 
-const API_BASE_URL = "https://ubiquitous-space-doodle-jjp59r77qg9rfj5xv-8000.app.github.dev";
+const API_BASE_URL = ";
 
 export default function GameLeaderboard() {
   const [leaderboardData, setLeaderboardData] = useState([]);
