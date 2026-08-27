@@ -90,7 +90,7 @@ body {
   justify-content: center;
   padding: 2rem;
   text-align: center;
-  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzPsYNiW1_aKN6_O25JJrVemO0cyE0GJu8cN1RThJg2A&s=10");
+  background: linear-gradient(red, green);
   background-size: cover;
   background-position: center;
 
