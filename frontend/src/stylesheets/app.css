@@ -409,7 +409,6 @@ body {
 }
 
 
-
 .form {
   display: flex;
   flex-direction: column;
@@ -439,7 +438,7 @@ button {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   width: 80%;
   height: 30px;
 }
@@ -447,12 +446,13 @@ button {
 
 label {
   font-weight: bold;
+  margin-left: 10px;
 }
 
 
 input {
   height: 31px;
-  width: 100%;
+  width: 80%;
 }
 
 .or-txt {
