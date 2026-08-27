@@ -1,7 +1,7 @@
 
 
 :root {
-  --bg-main: #eae9d1;
+  --bg-main: #eae5d1;
   --bg-card: rgba(245, 239, 239, 0.7);
   --bg-card-border: rgba(255, 255, 255, 0.1);
   --primary: #34a337;
@@ -100,7 +100,7 @@ body {
 .playHeader {
   font-family: 'courier new';
   font-weight: 700;
-  font-size: 34px;
+  font-size: 42px;
   color: white;
   margin-bottom: 10px;
 }
