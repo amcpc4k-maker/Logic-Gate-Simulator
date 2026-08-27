@@ -453,6 +453,9 @@ label {
 input {
   height: 31px;
   width: 80%;
+  display: block;
+  maring-left: auto;
+  margin-right: auto;
 }
 
 .or-txt {
