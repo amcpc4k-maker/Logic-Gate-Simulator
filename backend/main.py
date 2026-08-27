@@ -1,17 +1,18 @@
+import os
+import sys
+import random
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
-import random
 
+# Adjust Python path if running in serverless environment
+sys.path.append(os.path.dirname(__file__))
 
-from database import get_db, save_game_score, fetch_leaderboard, User
+from database import get_db, save_game_score, fetch_leaderboard, User, Score
 from gameApp import game_instance, get_daily_question, check_daily_answer
 
 app = FastAPI(title="Hangman API")
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../backend"))
-
 
 # Allow React frontend to make requests (CORS setup)
 app.add_middleware(
@@ -37,6 +38,10 @@ class UserCreateRequest(BaseModel):
     username: str
     password: str
 
+class ScoreSubmitRequest(BaseModel):
+    user_id: int
+    score: int
+
 # ------------------------------------------------------------------
 # 1. User Endpoints
 # ------------------------------------------------------------------
@@ -46,13 +51,11 @@ def register_user(payload: UserCreateRequest, db: Session = Depends(get_db)):
     if existing:
         raise HTTPException(status_code=400, detail="Username already taken")
     
-    # In production, hash password before saving (e.g. using passlib / bcrypt)
     new_user = User(username=payload.username, password_hash=payload.password)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
     return {"id": new_user.id, "username": new_user.username}
-
 
 # ------------------------------------------------------------------
 # 2. Hangman Game Endpoints
@@ -76,9 +79,8 @@ def make_guess(payload: GuessRequest, db: Session = Depends(get_db)):
         
     return state
 
-
 # ------------------------------------------------------------------
-# 3. Leaderboard & Daily Question Endpoints
+# 3. Leaderboard, Daily Question & Puzzles
 # ------------------------------------------------------------------
 @app.get("/api/leaderboard")
 def get_leaderboard(db: Session = Depends(get_db)):
@@ -92,13 +94,8 @@ def daily_question():
 def answer_daily_question(payload: DailyAnswerRequest):
     return check_daily_answer(payload.question_id, payload.user_choice)
 
-class ScoreSubmitRequest(BaseModel):
-    user_id: int
-    score: int
-
 @app.post("/api/scores/submit")
 def submit_score(payload: ScoreSubmitRequest, db: Session = Depends(get_db)):
-    # Insert new score entry tied to user_id
     new_score = Score(
         user_id=payload.user_id,
         score=payload.score
@@ -107,8 +104,6 @@ def submit_score(payload: ScoreSubmitRequest, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_score)
     return {"message": "Score submitted successfully!", "score_id": new_score.id}
-
-    import random
 
 WORD_BANK = [
     {"word": "PHOTOSYNTHESIS", "category": "Science", "hint": "The process plants use to convert light energy into chemical energy."},
@@ -120,3 +115,4 @@ WORD_BANK = [
 @app.get("/api/puzzles/random")
 def get_random_puzzle():
     return random.choice(WORD_BANK)
+    
