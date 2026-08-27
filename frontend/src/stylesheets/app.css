@@ -90,7 +90,7 @@ body {
   justify-content: center;
   padding: 2rem;
   text-align: center;
-  background-color:  #00003380;
+  background-color: rgba(0, 0, 0,100);
   background-size: cover;
   background-position: center;
 
