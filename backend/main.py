@@ -10,6 +10,8 @@ from gameApp import game_instance, get_daily_question, check_daily_answer
 
 app = FastAPI(title="Hangman API")
 
+sys.path.append(os.path.join(os.path.dirname(__file__), "../backend"))
+
 
 # Allow React frontend to make requests (CORS setup)
 app.add_middleware(
