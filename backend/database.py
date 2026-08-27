@@ -2,14 +2,14 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# Read the database URL from environment
+# Pull connection string from environment
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Fallback so local/serverless startup doesn't crash if environment variable is missing
+# Fall back to SQLite in-memory so top-level imports won't crash Vercel
 if not DATABASE_URL:
     DATABASE_URL = "sqlite:///:memory:"
 
-# Fix legacy postgres:// prefixes if using Heroku/Supabase
+# Replace legacy postgres:// prefix if using Supabase / Heroku
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
