@@ -455,7 +455,7 @@ body {
 
 label {
   font-weight: bold;
-  margin-left: 10px;
+  margin-left: 25px;
 }
 
 
@@ -465,7 +465,7 @@ input {
   display: block;
   maring-left: auto;
   margin-right: auto;
-  align-items: center;
+  justify-content: center;
 }
 
 .or-txt {
