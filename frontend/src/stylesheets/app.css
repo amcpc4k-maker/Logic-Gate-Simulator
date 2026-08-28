@@ -85,7 +85,7 @@ body {
   justify-content: center;
   padding: 2rem;
   text-align: center;
-  background-color: rgba(0, 0, 47, 0.7);
+  background-color: lightgray;
   background-size: cover;
   background-position: center;
 }
