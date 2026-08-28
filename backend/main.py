@@ -1,16 +1,22 @@
 import os
 import sys
-import random
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
+
+
 # Ensure Python can locate backend modules in serverless context
 sys.path.append(os.path.dirname(__file__))
 
 from database import get_db, save_game_score, fetch_leaderboard, User, Score
-from gameApp import game_instance, get_daily_question, check_daily_answer
+from gameApp import (
+    game_instance,
+    get_daily_question,
+    check_daily_answer,
+    WORD_CATEGORIES
+)
 
 app = FastAPI(title="Hangman API")
 
@@ -29,6 +35,9 @@ app.add_middleware(
 class GuessRequest(BaseModel):
     letter: str
     user_id: int | None = None
+
+class ResetRequest(BaseModel):
+    category: str | None = None
 
 class DailyAnswerRequest(BaseModel):
     question_id: int
@@ -77,21 +86,13 @@ def get_game_state():
     return game_instance.get_state()
 
 @app.post("/api/game/reset")
-def reset_game():
-    return game_instance.reset()
+def reset_game(payload: ResetRequest | None = None):
+    cat = payload.category if payload else None
+    return game_instance.reset(category=cat)
 
 @app.post("/api/game/guess")
 def make_guess(payload: GuessRequest, db: Session = Depends(get_db)):
-    state = game_instance.guess(payload.letter)
-    
-    # Save score if user won and provided user_id
-    if state["game_over"] and state["won"] and payload.user_id:
-        try:
-            score_val = game_instance.calculate_score()
-            save_game_score(db, payload.user_id, score_val)
-        except Exception as e:
-            print(f"Failed to record score: {e}")
-            
+    state = game_instance.guess(payload.letter, user_id=payload.user_id, db=db)
     return state
 
 # ------------------------------------------------------------------
@@ -103,7 +104,6 @@ def get_leaderboard(db: Session = Depends(get_db)):
         return fetch_leaderboard(db)
     except Exception as e:
         print(f"Leaderboard fetch error: {e}")
-        # Return fallback list rather than throwing HTML 500
         return []
 
 @app.get("/api/daily-question")
@@ -128,14 +128,7 @@ def submit_score(payload: ScoreSubmitRequest, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to submit score: {str(e)}")
 
-WORD_BANK = [
-    {"word": "PHOTOSYNTHESIS", "category": "Science", "hint": "The process plants use to convert light energy into chemical energy."},
-    {"word": "GRAVITY", "category": "Physics", "hint": "The fundamental force attracting a body toward the center of the earth."},
-    {"word": "OXYGEN", "category": "Chemistry", "hint": "An essential chemical element for human respiration with atomic number 8."},
-    {"word": "JAVASCRIPT", "category": "Programming", "hint": "The primary scripting language used to build dynamic web applications."}
-]
-
+# Serves random daily selection directly from gameApp's categorized pool
 @app.get("/api/puzzles/random")
 def get_random_puzzle():
-    return random.choice(WORD_BANK)
-    
+    return game_instance.get_state()
