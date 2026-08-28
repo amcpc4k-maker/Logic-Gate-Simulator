@@ -443,6 +443,10 @@ body {
   justify-content: center;
 }
 
+.createHeader {
+  text-align: center;
+  font-size: 12px;
+
 .createBtn {
   display: block; 
   margin-left: auto;
