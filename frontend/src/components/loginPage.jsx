@@ -105,7 +105,7 @@ export default function LoginPage({ onUserAuthenticated }) {
               {/* Primary Auth0 Login Button */}
               <button 
                 type="button"
-                className="altBtn" 
+                className="loginBtn" 
                 onClick={() => loginWithRedirect({ appState: { returnTo: "/" } })}
               >
                 SIGN-IN 
