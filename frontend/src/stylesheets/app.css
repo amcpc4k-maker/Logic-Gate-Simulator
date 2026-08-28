@@ -434,20 +434,12 @@ body {
 }
 
 
-.altBtn {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 20px;
+.loginBtn {
   width: 80%;
   height: 30px;
 }
 
 .createBtn {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 20px;
   width: 80%;
   height: 30px;
 }
