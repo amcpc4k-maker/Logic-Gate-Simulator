@@ -446,13 +446,14 @@ body {
 .createHeader {
   text-align: center;
   font-size: 12px;
+  margin-bottom: 10px;
 }
 
 .createBtn {
   display: block; 
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   width: 80%;
   height: 30px;
   justify-content: center;
@@ -469,7 +470,7 @@ input {
  display: block;
  margin-left: auto;
  margin-right: auto;
- margin-top: 10px;
+ margin-top: 5px;
  text-align: center;
  align-items: center;
  height: 31px; 
