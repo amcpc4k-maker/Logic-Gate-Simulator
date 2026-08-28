@@ -1202,16 +1202,6 @@ body {
 }
 
 
-button {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 25px;
-  width: 80%;
-  height: 25px;
-}
-
-
 label {
   font-weight: bold;
 }
@@ -1219,7 +1209,7 @@ label {
 
 input {
   height: 31px;
-  width: 100%;
+  width: 80%;
 }
 
 .or-txt {
@@ -1227,6 +1217,10 @@ input {
   font-weight: bold;
 }
 
+.loginBtn {
+  width: 90%;
+}
+  
 
 .createBtn {
   width: 80%;
