@@ -419,7 +419,7 @@ body {
   margin-top: 20px;
   background-color: white;
   border-radius: 5px;
-  box-shadow: 0 0 55px rgba(66, 34, 34, 0.914);
+  box-shadow: 0 0 15px teal;
 }
 
 
@@ -473,7 +473,7 @@ input {
  margin-top: 5px;
  text-align: center;
  align-items: center;
- height: 31px; 
+ height: 25px; 
  width: 80%;
 }
 
