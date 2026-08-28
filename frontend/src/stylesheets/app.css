@@ -435,11 +435,17 @@ body {
 
 
 .loginBtn {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   width: 80%;
   height: 30px;
 }
 
 .createBtn {
+  display: block; 
+  margin-left: auto;
+  margin-right: auto;
   width: 80%;
   height: 30px;
 }
