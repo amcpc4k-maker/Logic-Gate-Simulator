@@ -1079,15 +1079,15 @@ body {
   font-family: inherit;
   font-weight: 700;
   font-size: 0.95rem;
-  padding: 8px;
+  padding: 12px;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   background: rgba(84, 94, 110, 0.85);
   color: #fff;
   cursor: pointer;
   transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
-  width: 20px;
-  height: 20px;
+  width: 35px;
+  height: 35px;
 }
 
 .key-btn:hover:not(:disabled) {
@@ -1503,9 +1503,9 @@ tr:last-child td {
 
 
 .musicBtn {
-  position: relative;
-  top: 65%;
-  right: 37%%;
+  position: absolute;
+  top: 65px;
+  right: 37%px;
   width: 27px;
   height: 27px;
   border-radius: 5px;
