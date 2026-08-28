@@ -5,7 +5,6 @@ import '../stylesheets/app.css';
 
 
 
-
 // Replace with your Port 8000 URL from GitHub Codespaces
 const API_BASE_URL = "https://ubiquitous-space-doodle-jjp59r77qg9rfj5xv-8000.app.github.dev";
 
@@ -100,13 +99,13 @@ export default function LoginPage({ onUserAuthenticated }) {
             <p style={{ color: "#ff6b6b", textAlign: "center" }}>{errorMessage}</p>
           )}
 
+          
           {!isAuthenticated ? (
             <>
               {/* Primary Auth0 Login Button */}
               <button 
                 type="button"
                 className="altBtn" 
-                style={{ width: "100%", padding: "12px", marginBottom: "1rem", cursor: "pointer" }}
                 onClick={() => loginWithRedirect({ appState: { returnTo: "/" } })}
               >
                 SIGN-IN 
