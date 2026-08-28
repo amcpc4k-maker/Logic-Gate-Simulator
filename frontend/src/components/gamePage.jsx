@@ -153,7 +153,7 @@ export default function GamePage() {
               {currentPuzzle.category}
             </span>
           )}
-          <h2 className="question-text" style={{ color: '#fff', fontSize: '1.4rem', marginTop: '0.5rem' }}>
+          <h2 className="question-text" style={{ color: 'black', fontSize: '1.4rem', marginTop: '0.5rem' }}>
             {currentPuzzle.question || currentPuzzle.prompt || currentPuzzle.hint || "Guess the hidden answer!"}
           </h2>
         </div>
