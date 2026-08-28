@@ -829,15 +829,15 @@ body {
 
 .navbar-links a {
   margin-left: 1.5rem;
-  color: rgb(11, 11, 11);
+  color: black;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease;
 }
 
 .navbar-links a:hover {
-  background-color: yellowgreen;
-  color: black;
+  background-color: black;
+  color: white;
   padding: 5px;
   font-style: italic;
 }
