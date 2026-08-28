@@ -456,6 +456,7 @@ input {
   display: block;
   maring-left: auto;
   margin-right: auto;
+  justify-content: center;
 }
 
 .or-txt {
