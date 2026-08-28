@@ -460,9 +460,10 @@ label {
 
 
 input {
-  maring-left: auto;
-  margin-right: auto;
-  justify-content: center;
+ display: block;
+ margin-left: auto;
+ margin-right: auto;
+ text-align: center;
 }
 
 
