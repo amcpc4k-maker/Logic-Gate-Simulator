@@ -440,6 +440,7 @@ body {
   margin-right: auto;
   width: 80%;
   height: 30px;
+  justify-content: center;
 }
 
 .createBtn {
@@ -448,6 +449,7 @@ body {
   margin-right: auto;
   width: 80%;
   height: 30px;
+  justify-content: center;
 }
 
 
