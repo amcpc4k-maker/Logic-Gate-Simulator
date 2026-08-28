@@ -129,7 +129,7 @@ export default function GamePage() {
     );
   }
 
-  const strokeColor = "#00ffcc";
+  const strokeColor = "green";
   const strokeWidth = 3;
 
   return (
