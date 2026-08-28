@@ -464,9 +464,11 @@ input {
  display: block;
  margin-left: auto;
  margin-right: auto;
+ margin-top: 10px;
  text-align: center;
  align-items: center;
- height: 25px;
+ height: 31px; 
+ width: 80%;
 }
 
 
