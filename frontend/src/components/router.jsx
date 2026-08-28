@@ -48,6 +48,7 @@ function HomePage() {
 
       <h1 className="playHeader">Play Logic Gate</h1>
 
+      
       <button className="playBtn" onClick={handlePlay}>
         play /&gt;
       </button>
