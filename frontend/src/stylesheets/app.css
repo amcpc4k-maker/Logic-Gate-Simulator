@@ -446,6 +446,7 @@ body {
 .createHeader {
   text-align: center;
   font-size: 12px;
+}
 
 .createBtn {
   display: block; 
@@ -479,6 +480,7 @@ input {
 .or-txt {
   text-align: center;
   font-weight: bold;
+  margin-top: 10px;
 }
 
 
