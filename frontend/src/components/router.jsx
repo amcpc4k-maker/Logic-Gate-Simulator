@@ -48,8 +48,6 @@ function HomePage() {
 
       <h1 className="playHeader">Play Logic Gate</h1>
 
-      <button className="musicBtn">&#128266;</button>
-
       <button className="playBtn" onClick={handlePlay}>
         play /&gt;
       </button>
