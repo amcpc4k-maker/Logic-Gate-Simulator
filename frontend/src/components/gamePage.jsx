@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../stylesheets/app.css'
+import '../stylesheets/app.css';
 
-
-// Replace with your Port 8000 URL from GitHub Codespaces
 const API_BASE_URL = "";
-
 const MAX_ATTEMPTS = 6;
 const QWERTY_ROWS = [
   ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
@@ -15,19 +12,18 @@ const QWERTY_ROWS = [
 
 export default function GamePage() {
   const navigate = useNavigate();
-  
-  // Game state
+
   const [currentPuzzle, setCurrentPuzzle] = useState(null);
   const [guessedLetters, setGuessedLetters] = useState([]);
   const [score, setScore] = useState(0);
   const [isHit, setIsHit] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Fetch a random puzzle from FastAPI backend
+  // Fetch puzzle payload from FastAPI
   const fetchRandomPuzzle = useCallback(() => {
     setLoading(true);
     setGuessedLetters([]);
-    
+
     fetch(`${API_BASE_URL}/api/puzzles/random`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch puzzle");
@@ -43,12 +39,11 @@ export default function GamePage() {
       });
   }, []);
 
-  // Fetch initial puzzle on component load
   useEffect(() => {
     fetchRandomPuzzle();
   }, [fetchRandomPuzzle]);
 
-  // Submit high score to database
+  // Sync high scores on victory
   const submitScoreToDatabase = useCallback((newScore) => {
     const storedUser = localStorage.getItem('user');
     if (!storedUser) return;
@@ -71,11 +66,12 @@ export default function GamePage() {
       .catch((err) => console.error("Error submitting score:", err));
   }, []);
 
-
-  // Derived variables from current puzzle
-  const targetLetters = currentPuzzle?.word ? currentPuzzle.word.split("") : [];
+  // Safe letter arrays extracted from payload
+  const wordString = currentPuzzle?.secret_word || currentPuzzle?.word || "";
+  const targetLetters = wordString ? wordString.toUpperCase().split("") : [];
+  
   const wrongGuesses = guessedLetters.filter(
-    (letter) => !targetLetters.includes(letter)
+    (letter) => targetLetters.length > 0 && !targetLetters.includes(letter)
   );
   const remainingAttempts = MAX_ATTEMPTS - wrongGuesses.length;
 
@@ -83,7 +79,6 @@ export default function GamePage() {
   const isLost = remainingAttempts <= 0;
   const isGameOver = isWon || isLost;
 
-  // Sync score on Win condition
   useEffect(() => {
     if (isWon) {
       const updatedScore = score + 100;
@@ -92,21 +87,17 @@ export default function GamePage() {
     }
   }, [isWon, submitScoreToDatabase]);
 
-  // Handle Letter Guess
   const handleGuess = useCallback((letter) => {
     if (guessedLetters.includes(letter) || isGameOver || !currentPuzzle) return;
 
     setGuessedLetters((prev) => [...prev, letter]);
 
-    // Trigger visual shake feedback on wrong guess
-    if (!targetLetters.includes(letter)) {
+    if (targetLetters.length > 0 && !targetLetters.includes(letter)) {
       setIsHit(true);
       setTimeout(() => setIsHit(false), 400);
     }
   }, [guessedLetters, isGameOver, targetLetters, currentPuzzle]);
 
-
-  // Physical Keyboard Listener
   useEffect(() => {
     const handleKeyDown = (e) => {
       const char = e.key.toUpperCase();
@@ -118,7 +109,6 @@ export default function GamePage() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleGuess]);
 
-  // Next Round
   const handleNextGame = () => {
     fetchRandomPuzzle();
   };
@@ -133,12 +123,14 @@ export default function GamePage() {
     );
   }
 
+  const strokeColor = "#00ffcc";
+  const strokeWidth = 3;
 
   return (
     <div className="page-container">
       <div className={`game-card ${isHit ? 'shake-hit' : ''}`}>
-        
-        {/* --- 1. HEADER & GAME STATS --- */}
+
+        {/* 1. Header & Stats */}
         <div className="word-display-container">
           <div className="game-stats">
             <span>Score: <strong>{score}</strong></span>
@@ -148,59 +140,76 @@ export default function GamePage() {
           </div>
         </div>
 
-        {/* --- 2. QUESTION & HINT DISPLAY --- */}
+        {/* 2. Category & Hint */}
         <div className="question-box">
-          <span className="category-badge">{currentPuzzle.category}</span>
+          {currentPuzzle.category && (
+            <span className="category-badge">{currentPuzzle.category}</span>
+          )}
           <h2 className="question-text">{currentPuzzle.hint}</h2>
         </div>
 
-        {/* --- 3. STICKMAN SVG CANVAS --- */}
+        {/* 3. Stick Dragon Canvas */}
         <div className="stickManCanvas">
-          <svg height="220" width="200" className={isLost ? "defeat-drop" : "rope-swing"}>
-            {/* Gallows Base & Beam */}
-            <line x1="10" y1="210" x2="150" y2="210" stroke="#0d0d0d" strokeWidth="4" />
-            <line x1="40" y1="210" x2="40" y2="20" stroke="#0c0c0c" strokeWidth="4" />
-            <line x1="40" y1="20" x2="140" y2="20" stroke="#0d0d0e" strokeWidth="4" />
-            <line x1="140" y1="20" x2="140" y2="50" stroke="#0e0d0d" strokeWidth="3" />
+          <svg height="220" width="200" viewBox="0 0 200 200" className={isLost ? "defeat-drop" : "rope-swing"}>
+            {/* Gallows / Perch */}
+            <line x1="20" y1="190" x2="180" y2="190" stroke="#444" strokeWidth="4" />
+            <line x1="40" y1="190" x2="40" y2="20" stroke="#444" strokeWidth="4" />
+            <line x1="40" y1="20" x2="120" y2="20" stroke="#444" strokeWidth="4" />
+            <line x1="120" y1="20" x2="120" y2="40" stroke="#444" strokeWidth="2" strokeDasharray="3,3" />
 
-            {/* Step 1: Head */}
+            {/* 1. Head, Horns & Jaw */}
             {wrongGuesses.length >= 1 && (
-              <g className="pop-in-element">
-                <circle cx="140" cy="70" r="20" stroke="#0c0c0c" strokeWidth="3" fill="transparent" />
-                {/* Eyes */}
-                <circle cx="133" cy="66" r="2" fill="#101011" className="eye-blink" />
-                <circle cx="147" cy="66" r="2" fill="#0f0f0f" className="eye-blink" />
+              <g id="dragon-head">
+                <path d="M 105 45 L 135 45 L 145 55 L 125 60 L 105 50 Z" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} />
+                <path d="M 105 45 L 95 35 M 110 45 L 102 32" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} strokeLinecap="round" />
+                <circle cx="125" cy="50" r="1.5" fill="#ff0055" />
               </g>
             )}
 
-            {/* Step 2: Body */}
+            {/* 2. Serpent Spine & Tail */}
             {wrongGuesses.length >= 2 && (
-              <line x1="140" y1="90" x2="140" y2="150" stroke="#0a0a0a" strokeWidth="3" className="pop-in-element" />
+              <path
+                d="M 110 50 C 100 80, 140 100, 110 130 C 90 150, 80 160, 60 150 C 50 145, 55 135, 65 140"
+                fill="none"
+                stroke={strokeColor}
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+              />
             )}
 
-            {/* Step 3: Left Arm */}
+            {/* 3. Front Clawed Legs */}
             {wrongGuesses.length >= 3 && (
-              <line x1="140" y1="105" x2="110" y2="135" stroke="#0d0d0d" strokeWidth="3" className="pop-in-element arm-flail-left" />
+              <g id="front-legs">
+                <path d="M 115 85 L 130 95 L 138 92 M 130 95 L 135 98" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} strokeLinecap="round" />
+              </g>
             )}
 
-            {/* Step 4: Right Arm */}
+            {/* 4. Rear Legs */}
             {wrongGuesses.length >= 4 && (
-              <line x1="140" y1="105" x2="170" y2="135" stroke="#0e0e0e" strokeWidth="3" className="pop-in-element arm-flail-right" />
+              <g id="back-legs">
+                <path d="M 112 125 L 125 140 L 135 138 M 125 140 L 130 145" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} strokeLinecap="round" />
+              </g>
             )}
 
-            {/* Step 5: Left Leg */}
+            {/* 5. Wings */}
             {wrongGuesses.length >= 5 && (
-              <line x1="140" y1="150" x2="115" y2="195" stroke="#0f0f0f" strokeWidth="3" className="pop-in-element" />
+              <g id="wings">
+                <path d="M 112 75 L 80 50 L 70 75 L 95 82 L 75 95 L 110 85" fill="none" stroke={strokeColor} strokeWidth={strokeWidth} strokeLinejoin="round" />
+                <path d="M 115 75 L 140 55 L 145 78 L 122 83" fill="none" stroke={strokeColor} strokeWidth="2" strokeDasharray="2,2" />
+              </g>
             )}
 
-            {/* Step 6: Right Leg */}
+            {/* 6. Fire Breath */}
             {wrongGuesses.length >= 6 && (
-              <line x1="140" y1="150" x2="165" y2="195" stroke="#0f0f0f" strokeWidth="3" className="pop-in-element" />
+              <g id="fire-breath">
+                <path d="M 145 55 Q 165 50 175 62 Q 160 68 140 60 Z" fill="#ff3300" opacity="0.85" />
+                <path d="M 145 57 Q 160 53 168 60 Q 155 64 142 59 Z" fill="#ffcc00" />
+              </g>
             )}
           </svg>
         </div>
 
-        {/* --- 4. HIDDEN WORD LETTER SLOTS --- */}
+        {/* 4. Letter Slots */}
         <div className="letter-slots">
           {targetLetters.map((letter, index) => {
             const isRevealed = guessedLetters.includes(letter) || isLost;
@@ -216,7 +225,7 @@ export default function GamePage() {
           })}
         </div>
 
-        {/* --- 5. ON-SCREEN QWERTY KEYBOARD --- */}
+        {/* 5. On-Screen QWERTY Keyboard */}
         <div className="keyboard-container">
           {QWERTY_ROWS.map((row, rowIndex) => (
             <div key={rowIndex} className="keyboard-row">
@@ -244,15 +253,14 @@ export default function GamePage() {
           ))}
         </div>
 
-
-        {/* --- 6. GAME OVER / WIN MODAL OVERLAY --- */}
+        {/* 6. Game Over / Win Modal Overlay */}
         {isGameOver && (
           <div className="game-over-modal modal-appear">
             <h1 className="victoryTxt" style={{ color: isWon ? '#10b981' : '#ef476f' }}>
-              {isWon ? "Puzzle Solved! 🎉" : "Game Over! 💀"}
+              {isWon ? "Puzzle Solved! 🎉" : "Game Over! 🐉"}
             </h1>
             <p className="secret-word-reveal">
-              The secret word was: <strong>{currentPuzzle.word}</strong>
+              The secret word was: <strong>{wordString}</strong>
             </p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
               <button className="againBtn pulse-anim" onClick={handleNextGame}>
@@ -261,7 +269,7 @@ export default function GamePage() {
               <button 
                 className="againBtn" 
                 style={{ backgroundColor: '#3b82f6' }}
-                onClick={() => navigate('/leaderboards')}
+                onClick={() => navigate('/leaderboard')}
               >
                 View Leaderboards 🏆
               </button>
@@ -273,3 +281,4 @@ export default function GamePage() {
     </div>
   );
 }
+    
