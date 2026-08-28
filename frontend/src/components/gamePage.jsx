@@ -4,7 +4,10 @@ import '../stylesheets/app.css';
 
 const API_BASE_URL = "";
 const MAX_ATTEMPTS = 6;
-const QWERTY_ROWS = [
+
+// Extended keyboard rows to support numbers for trivia answers like "8" or "1969"
+const KEYBOARD_ROWS = [
+  ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
   ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
   ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
   ["Z", "X", "C", "V", "B", "N", "M"]
@@ -19,7 +22,7 @@ export default function GamePage() {
   const [isHit, setIsHit] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Fetch puzzle payload from FastAPI
+  // Fetch trivia payload from FastAPI
   const fetchRandomPuzzle = useCallback(() => {
     setLoading(true);
     setGuessedLetters([]);
@@ -66,16 +69,19 @@ export default function GamePage() {
       .catch((err) => console.error("Error submitting score:", err));
   }, []);
 
-  // Safe letter arrays extracted from payload
-  const wordString = currentPuzzle?.secret_word || currentPuzzle?.word || "";
-  const targetLetters = wordString ? wordString.toUpperCase().split("") : [];
+  // Normalizing secret answer safely (supports secret_word, answer, or word payloads)
+  const wordString = (currentPuzzle?.question_answer || currentPuzzle?.secret_word || currentPuzzle?.answer || currentPuzzle?.word || "").toUpperCase();
+  const targetLetters = wordString ? wordString.split("") : [];
   
+  // Filter out spaces so multi-word answers don't count space as a character to guess
+  const guessableCharacters = targetLetters.filter((char) => char !== " ");
+
   const wrongGuesses = guessedLetters.filter(
-    (letter) => targetLetters.length > 0 && !targetLetters.includes(letter)
+    (letter) => guessableCharacters.length > 0 && !guessableCharacters.includes(letter)
   );
   const remainingAttempts = MAX_ATTEMPTS - wrongGuesses.length;
 
-  const isWon = targetLetters.length > 0 && targetLetters.every((letter) => guessedLetters.includes(letter));
+  const isWon = guessableCharacters.length > 0 && guessableCharacters.every((letter) => guessedLetters.includes(letter));
   const isLost = remainingAttempts <= 0;
   const isGameOver = isWon || isLost;
 
@@ -92,16 +98,16 @@ export default function GamePage() {
 
     setGuessedLetters((prev) => [...prev, letter]);
 
-    if (targetLetters.length > 0 && !targetLetters.includes(letter)) {
+    if (guessableCharacters.length > 0 && !guessableCharacters.includes(letter)) {
       setIsHit(true);
       setTimeout(() => setIsHit(false), 400);
     }
-  }, [guessedLetters, isGameOver, targetLetters, currentPuzzle]);
+  }, [guessedLetters, isGameOver, guessableCharacters, currentPuzzle]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
       const char = e.key.toUpperCase();
-      if (/^[A-Z]$/.test(char)) {
+      if (/^[A-Z0-9]$/.test(char)) {
         handleGuess(char);
       }
     };
@@ -117,7 +123,7 @@ export default function GamePage() {
     return (
       <div className="page-container">
         <p style={{ color: 'white', textAlign: 'center', marginTop: '2rem' }}>
-          Loading puzzle...
+          Loading question...
         </p>
       </div>
     );
@@ -140,15 +146,19 @@ export default function GamePage() {
           </div>
         </div>
 
-        {/* 2. Category & Hint */}
-        <div className="question-box">
+        {/* 2. Dynamic Question & Category Display */}
+        <div className="question-box" style={{ textAlign: 'center', margin: '1rem 0' }}>
           {currentPuzzle.category && (
-            <span className="category-badge">{currentPuzzle.category}</span>
+            <span className="category-badge" style={{ background: '#3b82f6', color: '#fff', padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.8rem', textTransform: 'uppercase' }}>
+              {currentPuzzle.category}
+            </span>
           )}
-          <h2 className="question-text">{currentPuzzle.hint}</h2>
+          <h2 className="question-text" style={{ color: '#fff', fontSize: '1.4rem', marginTop: '0.5rem' }}>
+            {currentPuzzle.question || currentPuzzle.prompt || currentPuzzle.hint || "Guess the hidden answer!"}
+          </h2>
         </div>
 
-        {/* 3. Stick Dragon Canvas */}
+        {/* 3. Dragon SVG Canvas */}
         <div className="stickManCanvas">
           <svg height="220" width="200" viewBox="0 0 200 200" className={isLost ? "defeat-drop" : "rope-swing"}>
             {/* Gallows / Perch */}
@@ -209,9 +219,13 @@ export default function GamePage() {
           </svg>
         </div>
 
-        {/* 4. Letter Slots */}
+        {/* 4. Answer Slots */}
         <div className="letter-slots">
           {targetLetters.map((letter, index) => {
+            if (letter === " ") {
+              return <div key={index} style={{ width: '20px' }} />;
+            }
+
             const isRevealed = guessedLetters.includes(letter) || isLost;
             return (
               <div 
@@ -225,14 +239,14 @@ export default function GamePage() {
           })}
         </div>
 
-        {/* 5. On-Screen QWERTY Keyboard */}
+        {/* 5. On-Screen Keypad */}
         <div className="keyboard-container">
-          {QWERTY_ROWS.map((row, rowIndex) => (
+          {KEYBOARD_ROWS.map((row, rowIndex) => (
             <div key={rowIndex} className="keyboard-row">
               {row.map((letter) => {
                 const isGuessed = guessedLetters.includes(letter);
-                const isCorrect = isGuessed && targetLetters.includes(letter);
-                const isWrong = isGuessed && !targetLetters.includes(letter);
+                const isCorrect = isGuessed && guessableCharacters.includes(letter);
+                const isWrong = isGuessed && !guessableCharacters.includes(letter);
 
                 let keyClass = "key-btn";
                 if (isCorrect) keyClass += " key-correct";
@@ -253,14 +267,14 @@ export default function GamePage() {
           ))}
         </div>
 
-        {/* 6. Game Over / Win Modal Overlay */}
+        {/* 6. Game Over / Victory Modal */}
         {isGameOver && (
           <div className="game-over-modal modal-appear">
             <h1 className="victoryTxt" style={{ color: isWon ? '#10b981' : '#ef476f' }}>
-              {isWon ? "Puzzle Solved! 🎉" : "Game Over! 🐉"}
+              {isWon ? "Question Answered! 🎉" : "Game Over! 🐉"}
             </h1>
             <p className="secret-word-reveal">
-              The secret word was: <strong>{wordString}</strong>
+              The answer was: <strong>{wordString}</strong>
             </p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
               <button className="againBtn pulse-anim" onClick={handleNextGame}>
@@ -281,4 +295,3 @@ export default function GamePage() {
     </div>
   );
 }
-    
