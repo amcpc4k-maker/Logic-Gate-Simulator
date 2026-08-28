@@ -1086,6 +1086,8 @@ body {
   color: #fff;
   cursor: pointer;
   transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 20px;
+  height: 20px;
 }
 
 .key-btn:hover:not(:disabled) {
